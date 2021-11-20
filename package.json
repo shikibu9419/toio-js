@@ -1,0 +1,8 @@
+{
+  "main": "index.js",
+  "dependencies": {
+    "@toio/scanner": "^1.0.0",
+    "keypress": "^0.2.1",
+    "node-osc": "^6.1.11"
+  }
+}

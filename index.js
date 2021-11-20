@@ -1,0 +1,59 @@
+/**
+ * Copyright (c) 2019-present, Sony Interactive Entertainment Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+const keypress = require('keypress')
+const { NearestScanner } = require('@toio/scanner')
+
+const DURATION = 100 // ms
+const SPEED = {
+  forward: [350, 350],
+  backward: [-350, -350],
+  left: [20, 350],
+  right: [350, 20],
+}
+
+async function main() {
+  // start a scanner to find nearest cube
+  const cube = await new NearestScanner().start()
+
+  // connect to the cube
+  await cube.connect()
+
+  keypress(process.stdin)
+  process.stdin.on('keypress', (ch, key) => {
+    console.log('hog3')
+    // ctrl+c or q -> exit process
+    if ((key && key.ctrl && key.name === 'c') || (key && key.name === 'q')) {
+      process.exit()
+    }
+
+    switch (key.name) {
+      case 'up':
+        cube.move(...SPEED.forward, DURATION)
+        break
+      case 'down':
+        cube.move(...SPEED.backward, DURATION)
+        break
+      case 'left':
+        cube.move(...SPEED.left, DURATION)
+        break
+      case 'right':
+        cube.move(...SPEED.right, DURATION)
+        break
+    }
+  })
+
+  process.stdin.setRawMode(true)
+  process.stdin.resume()
+
+  while (true) {
+    var status = await cube.getDoubleTapStatus()
+    console.log(status)
+  }
+}
+
+main()
