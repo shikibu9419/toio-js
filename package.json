@@ -3,6 +3,7 @@
   "dependencies": {
     "@toio/scanner": "^1.0.0",
     "keypress": "^0.2.1",
-    "node-osc": "^6.1.11"
+    "node-osc": "^6.1.11",
+    "serialport": "^9.2.7"
   }
 }
