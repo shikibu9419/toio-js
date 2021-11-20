@@ -5,13 +5,9 @@ let port = 3000
 
 server.on('request', function(req, res) {
     res.writeHead(200, { 'Content-Type': 'text/plain' });
-        // リクエストされた処理により表示内容を分けてみる
     switch (req.url) {
         case '/about':
             msg = 'welcome about page';
-            break;
-        case '/company':
-            msg = 'welcome my company page';
             break;
         default:
             msg = 'page not found';
