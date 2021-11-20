@@ -7,8 +7,8 @@ var sendCount = 0;
 var oscClient = new osc.Client(address, port);
 var oscServer = new osc.Server(5000);
 
-function send(hoge, msgs) {
-  var sendMsg = new osc.Message(hoge);
+function send(msgs) {
+  var sendMsg = new osc.Message('/params');
   for (const msg in msgs)
     sendMsg.append(msg);
   oscClient.send(sendMsg);
@@ -40,29 +40,29 @@ function onGetPosId(posId) {
   }
 }
 
-async function setup() {
-  // 最も近いところにあるキューブを探す
-  const cube = await new NearestScanner().start()
+// async function setup() {
+//   // 最も近いところにあるキューブを探す
+//   const cube = await new NearestScanner().start()
+// 
+//   // キューブに接続
+//   cube.connect()
+// 
+//   cube
+//     .on('id:position-id', onGetPosId)
+//     .on('id:standard-id', data => console.log('[STD ID]', data))
+//     .on('id:position-id-missed', () => console.log('[POS ID MISSED]'))
+//     .on('id:standard-id-missed', () => console.log('[STD ID MISSED]'))
+// 
+//   return cube;
+// 
+// //   setInterval(() => {
+// //     cube.move(250, 50, 100)
+// //   }, 50)
+// }
+// 
+// async function main() {
+//   const cube = await setup()
+// 
+// }
 
-  // キューブに接続
-  cube.connect()
-
-  cube
-    .on('id:position-id', onGetPosId)
-    .on('id:standard-id', data => console.log('[STD ID]', data))
-    .on('id:position-id-missed', () => console.log('[POS ID MISSED]'))
-    .on('id:standard-id-missed', () => console.log('[STD ID MISSED]'))
-
-  return cube;
-
-//   setInterval(() => {
-//     cube.move(250, 50, 100)
-//   }, 50)
-}
-
-async function main() {
-  const cube = await setup()
-
-}
-
-main()
+send(['value1', 'value2'])
