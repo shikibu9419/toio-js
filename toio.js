@@ -28,7 +28,7 @@ function onGetPosId(posId) {
   const dy = prev.y - y;
 
   const normed = normalize(y, 'y')
-  send('gain', [normed])
+  send('/gain', [normed])
 
   prev.x = posId.x
   prev.y = posId.y
