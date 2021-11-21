@@ -5,7 +5,6 @@ let port = 3000
 
 //postがmesh→iftttから飛んでくる
 server.on('request', function (req, res) {
-
     // https://kazuhira-r.hatenablog.com/entry/20180201/1517497871
     req.setEncoding("utf-8");
     req.on("data", chunk => {

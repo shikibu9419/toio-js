@@ -1,34 +1,33 @@
 const { NearestScanner } = require('@toio/scanner')
+const osc = require('./osc')
+
+const MAT_SIZE = {x: 282, y: 200}
+const MAT_ORIGIN = {x: 108, y: 146}
 
 var prev = {x: -1, y: -1};
-// TODO
-var ORIGIN = {x: -1, y: -1};
-var MAT_SIZE = {x: -1, y: -1};
+var origin = {x: -1, y: -1};
 var initialized = false;
 
-function normalize(val, cood) {
-  switch (cood) {
-    case 'x':
-        return Math.max(Math.min(val / MAT_SIZE.x, 1), 0)
-    case 'y':
-        return Math.max(Math.min(val / MAT_SIZE.y, 1), 0)
-  }
-}
-
 function onGetPosId(posId) {
-//   if (!initialized) {
-//     ORIGIN = {x: posId.x, y: posId.y}
-//     initialized = true;
-//     console.log('ORIGIN:', ORIGIN)
+  if (!initialized) {
+    origin = {x: posId.x, y: posId.y}
+    initialized = true;
+    console.log('origin:', origin)
+  }
+
+  //console.log(posId.y)
+  const dx = posId.x - origin.x;
+  const dy = posId.y - origin.y;
+  //console.log(dx, dy)
+  //console.log(posId)
+  const normed_x = Math.max(Math.min((posId.x - MAT_ORIGIN.x) / MAT_SIZE.x, 1), 0)
+  const normed_y = Math.max(Math.min((posId.y - MAT_ORIGIN.y) / MAT_SIZE.y, 1), 0)
+  osc.send('/toiopos', [normed_x, normed_y])
+//   if (prev.x >= 0 && prev.y >= 0) {
+//     const dx = posId.x - prev.x;
+//     const dy = posId.y - prev.y;
+//     console.log(dx, dy)
 //   }
-
-  const x = posId.x - ORIGIN.x;
-  const y = posId.y - ORIGIN.y;
-  const dx = prev.x - x;
-  const dy = prev.y - y;
-
-  const normed = normalize(y, 'y')
-  send('/gain', [normed])
 
   prev.x = posId.x
   prev.y = posId.y
@@ -48,10 +47,16 @@ async function setup() {
     .on('id:standard-id-missed', () => console.log('[STD ID MISSED]'))
 
   return cube;
+
+//   setInterval(() => {
+//     cube.move(250, 50, 100)
+//   }, 50)
 }
 
-async function main() {
+async function start() {
   const cube = await setup()
 }
 
-main()
+exports.start = start
+
+// start()
