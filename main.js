@@ -19,31 +19,32 @@ function send(address, msgs) {
     sendMsg.append(msgs[i]);
   }
   oscClient.send(sendMsg);
+  console.log('sent', address, msgs);
 }
 // ----------------------------------------------------
 
 // serial ---------------------------------------------
-// const serialPort = new SerialPort(SERIAL_PORT, {
-//   baudRate: 9600
-// })
-// const parser = new Readline()
-// serialPort.pipe(parser)
-// 
-// serialPort.on('open', function () {
-//   console.log('Serial open.');
-// });
-// 
-// var untouchedCount = 0;
-// parser.on('data', data => {
-//   if (parseInt(data) < 300)
-//     untouchedCount++
-//   else
-//     untouchedCount = 0
-// 
-//   const val = untouchedCount <= 3 ? 1 : 0
-// 
-//   osc.send('/scratch', [val])
-// })
+const serialPort = new SerialPort(SERIAL_PORT, {
+  baudRate: 9600
+})
+const parser = new Readline()
+serialPort.pipe(parser)
+
+serialPort.on('open', function () {
+  console.log('Serial open.');
+});
+
+var untouchedCount = 0;
+parser.on('data', data => {
+  if (parseInt(data) < 300)
+    untouchedCount++
+  else
+    untouchedCount = 0
+
+  const val = untouchedCount <= 3 ? 1 : 0
+
+  osc.send('/scratch', [val])
+})
 // ----------------------------------------------------
 
 // toio ---------------------------------------------
@@ -52,10 +53,8 @@ function onGetPosId(index) {
     const normed_x = Math.max(Math.min((posId.x - 108) / 282, 1), 0)
     const normed_y = Math.max(Math.min((posId.y - 146) / 200, 1), 0)
     const normed_angle = parseInt(((posId.angle + 45) % 180) / 90)
-    if (index == 0)
-      console.log([index, normed_angle])
 
-    send(`/toio${i}`, [normed_x, normed_y, normed_angle])
+    send(`/toio${index}`, [normed_x, normed_y, normed_angle])
   }
 }
 
